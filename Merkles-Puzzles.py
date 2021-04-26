@@ -28,12 +28,12 @@ def merkles_puzzle():
         # secret + index as a pair
         pair = sec[i] + int.to_bytes(i, 4, 'big')
         # pair and sha1
-        plaintxt = pair + sha1(pair).setIn()
+        plaintxt = pair + sha1(pair).digest()
 
         # encryption process:
         key = urandom(10)
-        noise = sha1(key).setIn()
-        noise += sha1(noise).setIn()
+        noise = sha1(key).digest()
+        noise += sha1(noise).digest()
         ciphertxt = bytes(i ^ j for i, j in zip(plaintxt, noise))
 
         # puzzle:
@@ -51,18 +51,18 @@ def solve_puzzle(puzzle):
 
     for i in range(puzzle_size):
         # guess possibilities
-        noise = sha1(int.to_bytes(i, 2, 'big') + key).setIn()
-        noise += sha1(noise).setIn()
+        noise = sha1(int.to_bytes(i, 2, 'big') + key).digest()
+        noise += sha1(noise).digest()
 
         # decryption process
         plaintxt = bytes(i ^ j for i, j in zip(ciphertxt, noise))
 
         # pair
         pair = plaintxt[:20]
-        setIn = plaintxt[20:]
+        digest = plaintxt[20:]
 
         # time, key and index
-        if sha1(pair).setIn() == setIn:
+        if sha1(pair).digest() == digest:
             return i, pair[:16], int.from_bytes(pair[16:], 'big')
 
 alice_sec, public_puzzles = merkles_puzzle()
