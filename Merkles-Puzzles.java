@@ -84,10 +84,9 @@ class Merkle {
     Merkle mkl = new Merkle();
 
     //// Variables for setup
-    int totalPuzzles = 65536;
+    int totalPuzzles = 16777216;
     int keyLen = 3;
-    // Note that a key length greater than 8 doesn't work DES only accepts 7 bytes (8 * 7 = 56 bits)
-    // Note: 8 * 8 = 64 bits but a single bit from each byte is discarded as it's a parity checking bit
+    // Key length greater than 8 doesn't work DES only accepts 7 bytes (8 * 7 = 56 bits)
     if (args.length > 0) {
       keyLen = Integer.parseInt(args[0]);
     }
